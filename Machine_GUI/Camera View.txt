@@ -1,0 +1,52 @@
+import tkinter as tk
+from PIL import Image, ImageTk
+import requests
+from io import BytesIO
+import threading
+import time
+
+# === CONFIGURATION ===
+CAMERA_IP = "192.168.1.100"  # Replace with your Cognex IP
+CAMERA_URL = f"http://{CAMERA_IP}/img/snapshot.cgi"
+REFRESH_RATE = 0.5  # seconds between image fetches
+
+class CognexViewerApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Cognex 8405 Live View")
+        self.root.geometry("800x600")
+
+        self.image_label = tk.Label(self.root)
+        self.image_label.pack(expand=True)
+
+        self.running = True
+        self.thread = threading.Thread(target=self.update_loop)
+        self.thread.start()
+
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+
+    def update_loop(self):
+        while self.running:
+            try:
+                response = requests.get(CAMERA_URL, timeout=2)
+                image = Image.open(BytesIO(response.content))
+                image = image.resize((800, 600))  # Resize to fit window
+                photo = ImageTk.PhotoImage(image)
+                self.image_label.after(0, self.update_image, photo)
+            except Exception as e:
+                print(f"Failed to fetch image: {e}")
+            time.sleep(REFRESH_RATE)
+
+    def update_image(self, photo):
+        self.image_label.config(image=photo)
+        self.image_label.image = photo  # prevent garbage collection
+
+    def on_close(self):
+        self.running = False
+        self.thread.join()
+        self.root.destroy()
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = CognexViewerApp(root)
+    root.mainloop()

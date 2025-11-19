@@ -1,0 +1,20 @@
+import tkinter as tk
+
+# Create the main window
+root = tk.Tk()
+root.title("My Tkinter App")
+root.geometry("300x200")  # Width x Height
+
+# Add a label
+label = tk.Label(root, text="Machine Arm Controls")
+label.pack(pady=20)
+
+# Add a button
+def on_button_click():
+    label.config(text="Button clicked!")
+
+button = tk.Button(root, text="Click Me", command=on_button_click)
+button.pack()
+
+# Run the application
+root.mainloop()

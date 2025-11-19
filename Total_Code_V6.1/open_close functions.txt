@@ -1,0 +1,86 @@
+#include <Servo.h>
+
+Servo myServo;
+
+// Pin definitions
+const int CLAW_SERVO_PIN = 6;
+const int PULSE_PIN = 4;
+const int DIR_PIN = 5;
+
+// Claw angles
+const int CLAW_OPEN_ANGLE = 90;
+const int CLAW_CLOSED_ANGLE = 0;
+
+// Stepper settings
+const int STEPS_TO_MOVE = 1000;  // Adjust this based on your rail height
+const int STEP_DELAY = 500;      // Microseconds between steps
+
+void setup() {
+  // Stepper setup
+  pinMode(PULSE_PIN, OUTPUT);
+  pinMode(DIR_PIN, OUTPUT);
+
+  // Claw setup
+  myServo.attach(CLAW_SERVO_PIN);
+  open_claw();  // Default position
+
+  delay(1000);  // Let the claw settle
+}
+
+// ------------------- Claw Control -------------------
+
+void open_claw() {
+  myServo.write(CLAW_OPEN_ANGLE);
+}
+
+void close_claw() {
+  myServo.write(CLAW_CLOSED_ANGLE);
+}
+
+// ------------------- Stepper Control -------------------
+
+void move_rail_up() {
+  digitalWrite(DIR_PIN, HIGH);  // Adjust direction as needed
+  for (int i = 0; i < STEPS_TO_MOVE; i++) {
+    digitalWrite(PULSE_PIN, HIGH);
+    delayMicroseconds(STEP_DELAY);
+    digitalWrite(PULSE_PIN, LOW);
+    delayMicroseconds(STEP_DELAY);
+  }
+}
+
+void move_rail_down() {
+  digitalWrite(DIR_PIN, LOW);  // Adjust direction as needed
+  for (int i = 0; i < STEPS_TO_MOVE; i++) {
+    digitalWrite(PULSE_PIN, HIGH);
+    delayMicroseconds(STEP_DELAY);
+    digitalWrite(PULSE_PIN, LOW);
+    delayMicroseconds(STEP_DELAY);
+  }
+}
+
+// ------------------- Composite Actions -------------------
+
+void Pick_UP() {
+  move_rail_down();
+  delay(500);
+  close_claw();
+  delay(500);
+  move_rail_up();
+}
+
+void Put_DOWN() {
+  move_rail_down();
+  delay(500);
+  open_claw();
+  delay(500);
+  move_rail_up();
+}
+
+void loop() {
+  // Example usage
+  Pick_UP();
+  delay(2000);
+  Put_DOWN();
+  delay(2000);
+}

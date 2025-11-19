@@ -1,0 +1,2 @@
+myservo.write(Open_ANGL);
+myservo.write(Closed_ANGL);
