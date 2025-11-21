@@ -36,3 +36,9 @@
     
     To connect to cognex camera set ethernet Ip settings to-
         Use insight explorer V6.5.1
+
+# Information
+
+    Teensy version 4.1
+
+    To program with VScode/VScodium use platformio. The current version of platformio is not availible in the extension marketplace, instead download the .vsix file from: https://github.com/platformio/platformio-vscode-ide/releases, install the extension manually under the extension manager. PlatformIO version 3.3.4 was used in testing.
