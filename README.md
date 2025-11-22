@@ -1,5 +1,38 @@
 # roboticscell
 
+# Gantt Chart
+```mermaid
+gantt
+    title Robot Project Revamp
+    dateFormat  YYYY-MM-DD
+    axisFormat  %b %d
+    todayMarker on
+
+    section Electrical (must come first — unblocks everything)
+    Fix 3.3 V rail brown-out (#1)                :crit,    2025-11-24, 3d
+    Full wiring diagram + schematics (#2)        :active,  after 2025-11-24, 5d
+
+    section Vision & Homing (next highest impact)
+    Load multiple Cognex jobs from code (#3)     :         2025-12-01, 4d
+    Implement homing routine (#4)                :         2025-12-05, 6d
+
+    section Core Pick & Place
+    Detect part → return pose (#5)               :         2025-12-12, 7d
+    Replace hardcoded moves with sequence engine (#6) :crit, 2025-12-20, 10d
+
+    section External Control & Conveyor
+    Add TCP/serial command interface (#7)        :         2026-01-05, 5d
+    Conveyor control + sync with vision (#8)     :         2026-01-12, 6d
+
+    section Polish & Documentation
+    Code refactor + comments + structure (#9)    :         2026-01-20, 7d
+    %% runs in parallel with other tasks
+    Full build/flash README + how-to-run (#10)   :         2026-01-27, 3d
+
+    section Buffer / Testing / Demo Prep
+    Integration testing & bug fixes              :milestone, 2026-02-03, 0d
+    Final demo-ready system                      :milestone, 2026-02-10, 0d
+```
 # Robot Cell Operating Proceedure
 
     1) Ensure breaker switch inside of left panel is flipped to the on position
